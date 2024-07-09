@@ -105,7 +105,7 @@ while [ "$stack_done" != "1" ]; do
 
     # check for failed update states
     case "$state" in
-      paused|rollback_paused)
+      rollback_paused)
         service_done=2
         ;;
       rollback_*)
