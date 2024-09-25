@@ -10,11 +10,11 @@ inputs:
     description: 'Container registry to use'
     required: false
     default: ""
-  username:
+  registry_username:
     description: 'Container registry username'
     required: false
     default: ""
-  password:
+  registry_password:
     description: 'Container registry password'
     required: false
     default: ""
@@ -22,11 +22,14 @@ inputs:
     description: 'Host running Docker Swarm'
     required: true
   remote_port:
-    description: 'SSH port on the host running Docker Swarm'
+    description: 'port on the host running Docker Swarm'
     required: false
     default: "22"
-  remote_user:
+  remote_ca:
     description: 'User to connect to remote host'
+    required: true
+  remote_certificate:
+    description: 'Certificate to present'
     required: true
   remote_private_key:
     description: 'Private key used for ssh authentication'
@@ -55,14 +58,15 @@ inputs:
     default: "0"
 runs:
   using: 'docker'
-  image: 'docker://dresttech/docker-stack-deploy:latest'
+  image: 'docker://dresttech/docker-stack-deploy:tls'
   env:
     REGISTRY: ${{ inputs.registry }}
-    USERNAME: ${{ inputs.username }}
-    PASSWORD: ${{ inputs.password }}
+    USERNAME: ${{ inputs.registry_username }}
+    PASSWORD: ${{ inputs.registry_password }}
     REMOTE_HOST: ${{ inputs.remote_host }}
     REMOTE_PORT: ${{ inputs.remote_port }}
-    REMOTE_USER: ${{ inputs.remote_user }}
+    REMOTE_CA: ${{ inputs.remote_ca }}
+    REMOTE_CERTIFICATE: ${{ inputs.remote_certificate }}
     REMOTE_PRIVATE_KEY: ${{ inputs.remote_private_key }}
     DEPLOY_TIMEOUT: ${{ inputs.deploy_timeout }}
     STACK_FILE: ${{ inputs.stack_file }}
