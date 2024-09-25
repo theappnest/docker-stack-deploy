@@ -42,13 +42,13 @@ check_timeout() {
 }
 get_service_ids() {
   if [ -n "$opt_n" ]; then
-    service_list=""
-    for name in $opt_n; do
+    service_list="web"
+    for name in $service_list; do
       service_list="${service_list:+${service_list} }${stack_name}_${name}"
     done
     docker service inspect --format '{{.ID}}' ${service_list}
   else
-    docker stack services ${opt_f} -q "${stack_name}"
+    docker stack services "${stack_name}" | grep "_web" | awk '{print $1}'
   fi
 }
 service_state() {
@@ -126,12 +126,16 @@ while [ "$stack_done" != "1" ]; do
         state="replicating $replicas"
       fi
     fi
+
     service_state "$service" "$state"
 
     # check for states that indicate an update is done
+    if [[ "$service" == *_migration ]]; then
+      service_done=1
+    fi
     if [ "$service_done" = "1" ]; then
       case "$state" in
-        deployed|completed|rollback_completed)
+        deployed|completed|rollback_completed|paused)
           service_done=1
           ;;
         *)
