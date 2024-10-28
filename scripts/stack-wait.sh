@@ -135,7 +135,7 @@ while [ "$stack_done" != "1" ]; do
     fi
     if [ "$service_done" = "1" ]; then
       case "$state" in
-        deployed|completed|rollback_completed|paused)
+        deployed|completed|rollback_completed)
           service_done=1
           ;;
         *)
