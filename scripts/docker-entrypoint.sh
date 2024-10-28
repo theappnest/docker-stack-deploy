@@ -82,17 +82,6 @@ if [[ -z "${REMOTE_HOST}" ]]; then
   echo "Input remote_host is required!"
   exit 1
 fi
-if [[ -z "${REMOTE_PORT}" ]]; then
-  export REMOTE_PORT="22"
-fi
-if [[ -z "${REMOTE_USER}" ]]; then
-  echo "Input remote_user is required!"
-  exit 1
-fi
-if [[ -z "${REMOTE_PRIVATE_KEY}" ]]; then
-  echo "Input private_key is required!"
-  exit 1
-fi
 # CHECK STACK VARIABLES
 if [[ -z "${STACK_FILE}" ]]; then
   echo "Input stack_file is required!"
@@ -109,8 +98,9 @@ if [[ -z "${STACK_NAME}" ]]; then
   exit 1
 fi
 
+configure_tls_files
 
-export DOCKER_HOST=tcp://${DOCKER_HOST}:2376
+export DOCKER_HOST=tcp://${REMOTE_HOST}:2376
 export DOCKER_TLS_VERIFY=1
 export DOCKER_CERT_PATH=/tmp/certs
 
