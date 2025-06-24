@@ -58,7 +58,7 @@ inputs:
     default: "0"
 runs:
   using: 'docker'
-  image: 'docker://dresttech/docker-stack-deploy:tls'
+  image: 'docker://dresttech/docker-stack-deploy:tls-arm'
   env:
     REGISTRY: ${{ inputs.registry }}
     USERNAME: ${{ inputs.registry_username }}
